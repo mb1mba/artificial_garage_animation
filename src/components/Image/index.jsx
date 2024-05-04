@@ -1,14 +1,23 @@
-export default function Image({src})
+import { motion } from "framer-motion";
+import { forwardRef } from "react";
+import { Element } from "react-scroll";
+
+function Image({src, y, i}, ref)
 {
   return (
-    <div
-     className="image-div overflow-hidden w-[500px] h-[500px] flex justify-center items-center" 
-     style={{clipPath: "polygon(10% 10%, 90% 10%, 90% 90%, 10% 90%)", transform:"scale(.5)"}}
+    <Element
+     className="image-div w-[500px] h-[500px] flex justify-center items-center" 
+     style={{clipPath: "polygon(10% 10%, 90% 10%, 90% 90%, 10% 90%)"}}
+     ref={ref}
+     name={i}
     >
-      <img  
-        className="object-contain" src={src}
-        style={{transform: "scale()"}}
+      <motion.img
+        style={{y}}  
+        className="object-contain" 
+        src={src}
       />
-    </div>
+    </Element>
   )
 }
+
+export default forwardRef(Image)
