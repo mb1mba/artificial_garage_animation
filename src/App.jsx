@@ -1,17 +1,20 @@
-import { useState, useEffect } from 'react';
-import { Image } from './components';
-import { motion, useTransform, useScroll, useAnimate  } from 'framer-motion';
-import { ReactLenis, useLenis } from 'lenis/react'
-import { scroller, Element} from 'react-scroll';
+import { useState, useEffect, useRef } from 'react';
+import { Image } from "./components";
+import {  useTransform, useScroll, useAnimate } from 'framer-motion';
+import { ReactLenis } from 'lenis/react'
+import { scroller} from 'react-scroll';
+import { motion } from 'framer-motion';
 
 function App() 
 {
   const scope = imagesAppearAnimation();
+
   const { scrollYProgress } = useScroll({
     target: scope,
+    layoutEffect: false
   });
 
-  const [images, setImages] = useState(  [
+  const [images, setImages] = useState([
     {
       url: "https://images.unsplash.com/photo-1555353540-64580b51c258?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fGNhcnN8ZW58MHx8MHx8fDA%3D"
     },
@@ -47,7 +50,7 @@ function App()
   function imagesAppearAnimation()
   {
     const [scope, animate] = useAnimate();
- 
+
     useEffect(() => 
     {
       scroller.scrollTo('5', {
@@ -56,7 +59,7 @@ function App()
         block: "center",
         offset: -(window.innerHeight / 2 - 500 / 2)
       });
-      animate('.scale',{ transform: "scale(1)"}, { duration: 2, ease:[0.85, 0, 0.15, 1], delay: 2})
+      animate('.scale',{ transform: "scale(1)", position: "relative"}, { duration: 2, ease:[0.85, 0, 0.15, 1], delay: 2})
       animate('.image-div', { clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)"}, { duration: 2.2, ease:[0.85, 0, 0.15, 1], delay: 2})
     }, []);
 
@@ -64,51 +67,57 @@ function App()
   }
 
   const imageY = useTransform(scrollYProgress, [0, 1], [0, 100]);
+  const sideImagesY = useTransform(scrollYProgress, [0, 1], [window.innerHeight / 2, -250]);
 
   return (
   <>
-    <ReactLenis root options={{ lerp: 0.075, duration: 2, smoothTouch: true }}>
-      <section 
-        className="flex justify-center align-center w-fullp py-96"
+    <ReactLenis root options={{ lerp: 0.075, duration: 2}}>
+      <motion.section
+        className="min-h-screen" 
         ref={scope}
+        style={{ position: 'relative' }}
       >
-        <div className="scale"        
-         style={{transform: "scale(.5)"}}>
-          <motion.div className="flex flex-col overflow-hidden gap-4">
+         <div 
+          className="scale flex justify-center align-center relative"        
+          style={{transform: "scale(.5)", zIndex: 1}}
+          >
+          <div className="flex flex-col overflow-hidden gap-4 relative">
           {
           images.map((img, i) => {
             return (
               <>
-              <Image 
-                key={img.url + i}
-                src={img.url} 
-                i={i}
-                y={imageY}
-              />
-            </>
-            )})
-          }
-          </motion.div>
-        </div>
-
-      <div className='absolute top-0 grid left-10'>
-        <div className='relative'>
-          <div className='border border-solid h-24 w-24 absolute top-1/2'></div>
-            {images.map((img, i) => {
-              return (
-                <img 
+                <Image 
                   key={img.url + i}
                   src={img.url} 
-                  className='w-20 h-24'
+                  i={i.toString()}
+                  y={imageY}
                 />
-            )})}
+              </>
+            )})
+          }
+          </div>
+        </div> 
+  
+        <div  className='sticky bottom-0 h-0'>
+          <div className="-translate-y-full relative">
+            <div className='border border-solid h-24 w-24 absolute top-1/2  z-10'></div>
+            <motion.div 
+            className='flex flex-col w-fit relative will-change-transform' 
+            style={{ y: sideImagesY}}
+            >
+              {images.map((img, i) => {
+                  return (
+                    <img 
+                      key={img.url + i}
+                      src={img.url} 
+                      className='w-20 h-24'
+      
+                    />
+                )})}
+            </motion.div>
+            </div>
         </div>
-      </div>
-      </section>
-
-
-   
-
+      </motion.section>
     </ReactLenis>
   </>
   )
