@@ -9,43 +9,70 @@ function App()
 {
   const scope = imagesAppearAnimation();
 
-  const { scrollYProgress } = useScroll({
-    target: scope,
-    layoutEffect: false
-  });
-
-  const [images, setImages] = useState([
+  const [imageHeight, setImageHeight] = useState(0);
+  const [viewportHeight] = useState(window.innerHeight);
+  const [images] = useState([
     {
-      url: "https://images.unsplash.com/photo-1555353540-64580b51c258?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fGNhcnN8ZW58MHx8MHx8fDA%3D"
+      url: "https://i.pinimg.com/736x/85/e4/b5/85e4b57c8abe761a10f10a2ae61e853e.jpg"
     },
     {
-      url: "https://images.unsplash.com/photo-1522932467653-e48f79727abf?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mzh8fGNhcnN8ZW58MHx8MHx8fDA%3D"
+      url: "https://i.pinimg.com/564x/7d/63/26/7d6326c84ee41911377b3d4d0da97578.jpg"
     },
     {
-      url: "https://images.unsplash.com/photo-1569240651611-302c9897bde5?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NzF8fGNhcnN8ZW58MHx8MHx8fDA%3D"
+      url: "https://i.pinimg.com/736x/57/52/31/575231d65bb5ed73bcafca20cb4ba289.jpg"
     },
     {
-      url: "https://images.unsplash.com/photo-1565064012199-c537fe6fb4b5?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTUyfHxjYXJzfGVufDB8fDB8fHww"
+      url: "https://i.pinimg.com/564x/3d/7c/3a/3d7c3af7dd391903969cac410ab63baa.jpg"
     },
     {
-      url: "https://images.unsplash.com/photo-1610631902787-291ccb71df30?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTg4fHxjYXJzfGVufDB8fDB8fHww"
+      url: "https://i.pinimg.com/564x/63/7c/cf/637ccfcab947682039f5bdefc6cf581b.jpg"
     },
     {
-      url: "https://images.unsplash.com/photo-1565064012199-c537fe6fb4b5?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTUyfHxjYXJzfGVufDB8fDB8fHww"
+      url: "https://i.pinimg.com/564x/1f/f1/b5/1ff1b565b58075fc7790771409775ad9.jpg"
     },
     {
-      url: "https://images.unsplash.com/photo-1600099260176-341fb0d9a6ca?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjQ2fHxjYXJzfGVufDB8fDB8fHww"
+      url: "https://i.pinimg.com/564x/99/35/7f/99357f3444d1fc9dfcfd4d14b84d0f74.jpg"
     },
     {
-      url: "https://images.unsplash.com/photo-1555353540-64580b51c258?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fGNhcnN8ZW58MHx8MHx8fDA%3D"
+      url: "https://i.pinimg.com/564x/3b/a4/12/3ba4129874c8e07b731c8c015eed1267.jpg"
     },
     {
-      url: "https://images.unsplash.com/photo-1522932467653-e48f79727abf?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mzh8fGNhcnN8ZW58MHx8MHx8fDA%3D"
+      url: "https://i.pinimg.com/564x/82/5c/76/825c76e35494dd54a464d4d7edbd758e.jpg"
     },
     {
-      url: "https://images.unsplash.com/photo-1569240651611-302c9897bde5?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NzF8fGNhcnN8ZW58MHx8MHx8fDA%3D"
+      url: "https://i.pinimg.com/564x/d2/71/a9/d271a97464e8af2ad8121f55ac470f4e.jpg"
     },
   ])
+
+  const sideContainer = useRef(null);
+  const imagesContainer = useRef(null);
+
+  const sideContainerHeight = sideContainer.current?.offsetHeight;
+
+  const { scrollYProgress } = useScroll({
+    target: scope,
+  });
+
+  const imagesContainerY = useTransform(
+    scrollYProgress, 
+    [0, 1], 
+    [0, 100]);
+
+  const minimapScroll = useTransform(
+    scrollYProgress, 
+    [0, 1],
+    [viewportHeight / 2 - 96 / 2, -(sideContainerHeight - viewportHeight / 2 - 96 / 2)]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+
+    const imageDiv = document.querySelector('.image-div');
+    if (imageDiv) {
+      setImageHeight(imageDiv.offsetHeight); 
+    }
+
+    console.log(imageHeight)
+  }, []);
 
   function imagesAppearAnimation()
   {
@@ -53,73 +80,81 @@ function App()
 
     useEffect(() => 
     {
-      scroller.scrollTo('5', {
-        duration: 2300,
-        smooth: true,
-        block: "center",
-        offset: -(window.innerHeight / 2 - 500 / 2)
-      });
-      animate('.scale',{ transform: "scale(1)", position: "relative"}, { duration: 2, ease:[0.85, 0, 0.15, 1], delay: 2})
-      animate('.image-div', { clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)"}, { duration: 2.2, ease:[0.85, 0, 0.15, 1], delay: 2})
+      scrollToElement('5');
+      animate('#scale',{ transform: "scale(1)", position: "relative"}, 
+      { duration: 2, ease:[0.85, 0, 0.15, 1], delay: 2})
+      animate('.image-div', { clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)"},
+      { duration: 2.2, ease:[0.85, 0, 0.15, 1], delay: 2})
+      animate('#minimap', { opacity: 1}, { delay: 3.10})
+      animate('#scope', { opacity: 1}, { delay: 3.10})
+      animate('#minimap-container', { transform: 'translateY(-100%)'}, { delay: 1.5, duration: 3, ease:[0.85, 0, 0.15, 1] })
     }, []);
 
     return scope;
   }
 
-  const imageY = useTransform(scrollYProgress, [0, 1], [0, 100]);
-  const sideImagesY = useTransform(scrollYProgress, [0, 1], [window.innerHeight / 2, -250]);
-
+  function scrollToElement(elementName, duration = 2300) {
+    // Perform the smooth scroll
+    return scroller.scrollTo(elementName, {
+      duration: duration,
+      smooth: "easeInOutQuint",
+      offset: -(viewportHeight / 2 - imageHeight / 2),
+      ignoreCancelEvents: true
+    })
+  }
+    
   return (
-  <>
-    <ReactLenis root options={{ lerp: 0.075, duration: 2}}>
-      <motion.section
+    <ReactLenis root options={{ lerp: 0.03, duration: 2}}>
+      <section
         className="min-h-screen" 
         ref={scope}
         style={{ position: 'relative' }}
       >
          <div 
-          className="scale flex justify-center align-center relative"        
+          id="scale"
+          className="flex justify-center align-center relative lg:py-20 2xl:py-96 z-30"        
           style={{transform: "scale(.5)", zIndex: 1}}
           >
-          <div className="flex flex-col overflow-hidden gap-4 relative">
-          {
-          images.map((img, i) => {
-            return (
-              <>
-                <Image 
-                  key={img.url + i}
-                  src={img.url} 
-                  i={i.toString()}
-                  y={imageY}
-                />
-              </>
-            )})
-          }
-          </div>
+            <div className="flex flex-col gap-4 relative" ref={imagesContainer}>
+              {images.map((img, i) => {
+                return (
+                    <Image 
+                      key={img.url + i}
+                      src={img.url} 
+                      i={(i+1).toString()}
+                      y={imagesContainerY}
+                    />
+                )})}
+            </div>
         </div> 
   
-        <div  className='sticky bottom-0 h-0'>
-          <div className="-translate-y-full relative">
-            <div className='border border-solid h-24 w-24 absolute top-1/2  z-10'></div>
-            <motion.div 
-            className='flex flex-col w-fit relative will-change-transform' 
-            style={{ y: sideImagesY}}
+        <div  className='sticky bottom-0 h-0 z-10'>
+          <div id="minimap-container" className="relative h-screen w-fit" style={{left: "10vw"}}>
+            <div id="scope" className='border border-solid rounded-md h-[112px] w-24 absolute top-1/2 -left-2 z-20 opacity-0' 
+              style={{transform: 'translateY(-50%)'}}>
+            </div>
+            <motion.div
+              ref={sideContainer}
+              id="minimap"
+              className='flex flex-col w-fit gap-4 relative will-change-transform opacity-0' 
+              style={{ y: minimapScroll}}
             >
               {images.map((img, i) => {
                   return (
-                    <img 
+                    <motion.img
+                      alt=""
+                      whileHover={{ scale: 0.9, transition: { duration: 0.3, ease: "easeInOut"} }}
+                      onClick={() => scrollToElement((i+1).toString(), 1500)}
                       key={img.url + i}
                       src={img.url} 
-                      className='w-20 h-24'
-      
+                      className='w-20 h-24 object-cover cursor-pointer'
                     />
                 )})}
             </motion.div>
             </div>
         </div>
-      </motion.section>
+      </section>
     </ReactLenis>
-  </>
   )
 }
 
