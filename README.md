@@ -1,8 +1,37 @@
-# React + Vite
+# Minimap Scroll Reproduction
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project reproduces the minimap scroll feature from Artificial Garage using React and Framer Motion.
 
-Currently, two official plugins are available:
+## Overview
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+The minimap scroll feature allows users to navigate through a long list of images using a smaller minimap representation.
+
+## Installation
+
+1. Clone the repository:
+
+    ```bash
+    git clone https://github.com/mb1mba/artificial_garage_animation
+    ```
+
+2. Navigate into the project directory:
+
+    ```bash
+    cd minimap-scroll-reproduction
+    ```
+
+3. Install dependencies:
+
+    ```bash
+    npm install
+    ```
+
+4. Run the project:
+
+    ```bash
+    npm start
+    ```
+
+## Credits
+
+This project is inspired by the minimap scroll feature found in Artificial Garage.
