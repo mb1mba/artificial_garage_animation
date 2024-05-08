@@ -65,11 +65,13 @@ function App()
 
   useEffect(() => {
     window.scrollTo(0, 0);
-
+    window.addEventListener('resize', () => window.location.reload())
     const imageDiv = document.querySelector('.image-div');
     if (imageDiv) {
       setImageHeight(imageDiv.offsetHeight); 
     }
+    return () => window.removeEventListener('resize',  window.addEventListener('resize', () => window.location.reload()));
+
   }, []);
 
   function appearanceOfImagesAnimation()
@@ -103,13 +105,13 @@ function App()
   
   return (
     <ReactLenis root options={{ lerp: 0.03, duration: 2 }}>
-    <section className="min-h-screen" ref={scope} style={{ position: 'relative' }}>
+    <section className="hidden lg:block min-h-screen" ref={scope} style={{ position: 'relative' }}>
       <div id="scale" className="flex justify-center align-center relative lg:py-20 2xl:py-96 z-30" style={{ transform: "scale(.5)", zIndex: 1 }}>
         <div className="flex flex-col gap-4 relative" ref={imagesContainer}>
           {images.map((img, i) => <Image key={img.url + i} src={img.url} i={(i + 1).toString()} y={imagesContainerY} />)}
         </div>
       </div>
-      <div className='sticky bottom-0 h-0 z-10'>
+      <div className='sticky bottom-0 h-0 z-10 hidden lg:block'>
         <div id="minimap-container" className="relative h-screen w-fit" style={{ left: "10vw" }}>
           <div id="scope" className='border border-solid rounded-md h-[112px] w-24 absolute top-1/2 -left-2 z-20 opacity-0' style={{ transform: 'translateY(-50%)' }}></div>
           <motion.div ref={sideContainer} id="minimap" className='flex flex-col w-fit gap-4 relative will-change-transform opacity-0' style={{ y: minimapScroll }}>
@@ -117,6 +119,10 @@ function App()
           </motion.div>
         </div>
       </div>
+    </section>
+
+    <section className='flex justify-center items-center w-full h-screen lg:hidden'>
+      <p className='text-white'>Go on a greater screen please :)</p>
     </section>
   </ReactLenis>
   )
