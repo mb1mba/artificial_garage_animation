@@ -7,7 +7,7 @@ function Image({src, y, i})
     <Element
      className="image-div  w-[500px] h-[500px] flex justify-center items-center relative overflow-hidden" 
      style={{clipPath: "polygon(10% 10%, 90% 10%, 90% 90%, 10% 90%)"}}
-     name={i.toString()}
+     id={i.toString()}
     >
       <motion.img
         style={{y}}

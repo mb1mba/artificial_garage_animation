@@ -7,7 +7,7 @@ import { motion } from 'framer-motion';
 
 function App() 
 {
-  const scope = imagesAppearAnimation();
+  const scope = appearanceOfImagesAnimation();
 
   const [imageHeight, setImageHeight] = useState(0);
   const [viewportHeight] = useState(window.innerHeight);
@@ -70,11 +70,9 @@ function App()
     if (imageDiv) {
       setImageHeight(imageDiv.offsetHeight); 
     }
-
-    console.log(imageHeight)
   }, []);
 
-  function imagesAppearAnimation()
+  function appearanceOfImagesAnimation()
   {
     const [scope, animate] = useAnimate();
 
@@ -102,59 +100,25 @@ function App()
       ignoreCancelEvents: true
     })
   }
-    
-  return (
-    <ReactLenis root options={{ lerp: 0.03, duration: 2}}>
-      <section
-        className="min-h-screen" 
-        ref={scope}
-        style={{ position: 'relative' }}
-      >
-         <div 
-          id="scale"
-          className="flex justify-center align-center relative lg:py-20 2xl:py-96 z-30"        
-          style={{transform: "scale(.5)", zIndex: 1}}
-          >
-            <div className="flex flex-col gap-4 relative" ref={imagesContainer}>
-              {images.map((img, i) => {
-                return (
-                    <Image 
-                      key={img.url + i}
-                      src={img.url} 
-                      i={(i+1).toString()}
-                      y={imagesContainerY}
-                    />
-                )})}
-            </div>
-        </div> 
   
-        <div  className='sticky bottom-0 h-0 z-10'>
-          <div id="minimap-container" className="relative h-screen w-fit" style={{left: "10vw"}}>
-            <div id="scope" className='border border-solid rounded-md h-[112px] w-24 absolute top-1/2 -left-2 z-20 opacity-0' 
-              style={{transform: 'translateY(-50%)'}}>
-            </div>
-            <motion.div
-              ref={sideContainer}
-              id="minimap"
-              className='flex flex-col w-fit gap-4 relative will-change-transform opacity-0' 
-              style={{ y: minimapScroll}}
-            >
-              {images.map((img, i) => {
-                  return (
-                    <motion.img
-                      alt=""
-                      whileHover={{ scale: 0.9, transition: { duration: 0.3, ease: "easeInOut"} }}
-                      onClick={() => scrollToElement((i+1).toString(), 1500)}
-                      key={img.url + i}
-                      src={img.url} 
-                      className='w-20 h-24 object-cover cursor-pointer'
-                    />
-                )})}
-            </motion.div>
-            </div>
+  return (
+    <ReactLenis root options={{ lerp: 0.03, duration: 2 }}>
+    <section className="min-h-screen" ref={scope} style={{ position: 'relative' }}>
+      <div id="scale" className="flex justify-center align-center relative lg:py-20 2xl:py-96 z-30" style={{ transform: "scale(.5)", zIndex: 1 }}>
+        <div className="flex flex-col gap-4 relative" ref={imagesContainer}>
+          {images.map((img, i) => <Image key={img.url + i} src={img.url} i={(i + 1).toString()} y={imagesContainerY} />)}
         </div>
-      </section>
-    </ReactLenis>
+      </div>
+      <div className='sticky bottom-0 h-0 z-10'>
+        <div id="minimap-container" className="relative h-screen w-fit" style={{ left: "10vw" }}>
+          <div id="scope" className='border border-solid rounded-md h-[112px] w-24 absolute top-1/2 -left-2 z-20 opacity-0' style={{ transform: 'translateY(-50%)' }}></div>
+          <motion.div ref={sideContainer} id="minimap" className='flex flex-col w-fit gap-4 relative will-change-transform opacity-0' style={{ y: minimapScroll }}>
+            {images.map((img, i) => <motion.img alt="" key={img.url + i} src={img.url} className='w-20 h-24 object-cover cursor-pointer' onClick={() => scrollToElement((i + 1).toString(), 1500)} />)}
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  </ReactLenis>
   )
 }
 
