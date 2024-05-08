@@ -115,7 +115,7 @@ function App()
         <div id="minimap-container" className="relative h-screen w-fit" style={{ left: "10vw" }}>
           <div id="scope" className='border border-solid rounded-md h-[112px] w-24 absolute top-1/2 -left-2 z-20 opacity-0' style={{ transform: 'translateY(-50%)' }}></div>
           <motion.div ref={sideContainer} id="minimap" className='flex flex-col w-fit gap-4 relative will-change-transform opacity-0' style={{ y: minimapScroll }}>
-            {images.map((img, i) => <motion.img alt="" key={img.url + i} src={img.url} className='w-20 h-24 object-cover cursor-pointer' onClick={() => scrollToElement((i + 1).toString(), 1500)} />)}
+            {images.map((img, i) => <motion.img alt="" key={img.url + i} src={img.url} className='w-20 h-24 object-cover'/>)}
           </motion.div>
         </div>
       </div>
